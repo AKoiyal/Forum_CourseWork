@@ -1,15 +1,31 @@
 <?php
+session_start();
+include 'includes/DatabaseConnection.php';
+
+$isLoggedIn = isset($_SESSION['user_id']);
+$isAdmin = $isLoggedIn && isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
+$isStudent = $isLoggedIn && isset($_SESSION['role']) && $_SESSION['role'] === 'student';
+
 $title = 'Home';
 
 ob_start();
 ?>
+
 <h2>Welcome to Student Help Forum</h2>
 
 <div class="home-box">
-    <p>This website allows students to post coursework questions, upload screenshot names, manage users, manage modules, and contact the administrator.</p>
-    <p>Use the menu above to navigate through the system.</p>
+    <?php if (!$isLoggedIn): ?>
+        <p>You are browsing as a guest.</p>
+        <p>Please <a href="login.php">login</a> to post or send messages.</p>
+    <?php elseif ($isStudent): ?>
+        <p>Welcome, <?=$_SESSION['username']?>!</p>
+        <p>Use the menu to browse posts, users, modules, and messages.</p>
+    <?php elseif ($isAdmin): ?>
+    <p>Welcome, <?=$_SESSION['username']?>!</p>
+    <p>Use the menu to manage posts, users, modules, and messages.</p>
+<?php endif; ?>
 </div>
+
 <?php
 $output = ob_get_clean();
-
 include 'templates/layout.html.php';

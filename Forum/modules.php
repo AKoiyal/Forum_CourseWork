@@ -1,4 +1,5 @@
 <?php
+session_start();
 include 'includes/DatabaseConnection.php';
 
 $title = 'Module List';

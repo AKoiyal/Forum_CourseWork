@@ -1,8 +1,16 @@
 <h2>Post List</h2>
 
-<p>
-    <a href="addpost.php" class="button-link">Add New Post</a>
-</p>
+<?php
+$isLoggedIn = isset($_SESSION['user_id']);
+$isAdmin    = $isLoggedIn && $_SESSION['role'] === 'admin';
+$isGuest    = !$isLoggedIn;
+?>
+
+<?php if (!$isGuest): ?>
+    <p>
+        <a href="addpost.php" class="button-link">Add New Post</a>
+    </p>
+<?php endif; ?>
 
 <?php foreach ($posts as $post): ?>
     <article>
@@ -19,13 +27,19 @@
             </p>
         <?php endif; ?>
 
-        <p>
-            <a href="editpost.php?id=<?=$post['post_id']?>" class="edit-link">Edit</a>
-        </p>
+        <?php
+        $isOwner = $isLoggedIn && $_SESSION['user_id'] == $post['user_id'];
+        ?>
 
-        <form action="deletepost.php" method="post" onsubmit="return confirmDelete('post');" class="small-form">
-            <input type="hidden" name="post_id" value="<?=$post['post_id']?>">
-            <input type="submit" value="Delete" class="delete-btn">
-        </form>
+        <?php if ($isAdmin || $isOwner): ?>
+            <p>
+                <a href="editpost.php?id=<?=$post['post_id']?>" class="edit-link">Edit</a>
+            </p>
+
+            <form action="deletepost.php" method="post" onsubmit="return confirmDelete('post');" class="small-form">
+                <input type="hidden" name="post_id" value="<?=$post['post_id']?>">
+                <input type="submit" value="Delete" class="delete-btn">
+            </form>
+        <?php endif; ?>
     </article>
 <?php endforeach; ?>

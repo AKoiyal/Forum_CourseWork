@@ -1,4 +1,5 @@
 <?php
+session_start();
 $title = 'Contact admin';
 
 if (isset($_POST['message'])) {

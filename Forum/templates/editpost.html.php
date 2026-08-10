@@ -1,30 +1,27 @@
 <h2>Edit Post</h2>
 
-<form action="" method="post">
+<form action="" method="post" enctype="multipart/form-data">
     <input type="hidden" name="post_id" value="<?=$post['post_id']?>">
 
     <label for="title">Post title</label>
-    <input type="text" name="title" id="title" value="<?=$post['title']?>" required>
+    <input type="text" name="title" id="title" value="<?=htmlspecialchars($post['title'])?>" required>
 
     <label for="content">Post content</label>
-    <textarea name="content" id="content" required><?=$post['content']?></textarea>
+    <textarea name="content" id="content" required><?=htmlspecialchars($post['content'])?></textarea>
 
-    <label for="image_path">Image file name</label>
-    <input type="text" name="image_path" id="image_path" value="<?=$post['image_path']?>">
+    <label for="image">Upload Image</label>
+    <input type="file" name="image" id="image" accept="image/*">
 
-    <label for="user_id">User</label>
-    <select name="user_id" id="user_id" required>
-        <?php foreach ($users as $user): ?>
-            <option value="<?=$user['user_id']?>" <?php if ($user['user_id'] == $post['user_id']) echo 'selected'; ?>>
-                <?=$user['username']?>
-            </option>
-        <?php endforeach; ?>
-    </select>
+    <?php if (!empty($post['image_path'])): ?>
+        <p>
+            Current image: <img src="images/<?=$post['image_path']?>" alt="Current image" style="max-width:200px;">
+        </p>
+    <?php endif; ?>
 
     <label for="module_id">Module</label>
     <select name="module_id" id="module_id" required>
         <?php foreach ($modules as $module): ?>
-            <option value="<?=$module['module_id']?>" <?php if ($module['module_id'] == $post['module_id']) echo 'selected'; ?>>
+            <option value="<?=$module['module_id']?>" <?=($module['module_id'] == $post['module_id']) ? 'selected' : ''?>>
                 <?=$module['module_name']?>
             </option>
         <?php endforeach; ?>

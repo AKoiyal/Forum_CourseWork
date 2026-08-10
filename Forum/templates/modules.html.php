@@ -1,8 +1,15 @@
 <h2>Module List</h2>
 
-<p>
-    <a href="addmodule.php" class="button-link">Add New Module</a>
-</p>
+<?php
+$isLoggedIn = isset($_SESSION['user_id']);
+$isAdmin    = $isLoggedIn && $_SESSION['role'] === 'admin';
+?>
+
+<?php if ($isAdmin): ?>
+    <p>
+        <a href="addmodule.php" class="button-link">Add New Module</a>
+    </p>
+<?php endif; ?>
 
 <table>
     <tr>
@@ -16,12 +23,14 @@
         <td><?=$module['module_code']?></td>
         <td><?=$module['module_name']?></td>
         <td>
-            <a href="editmodule.php?id=<?=$module['module_id']?>" class="edit-link">Edit</a>
+            <?php if ($isAdmin): ?>
+                <a href="editmodule.php?id=<?=$module['module_id']?>" class="edit-link">Edit</a>
 
-            <form action="deletemodule.php" method="post" onsubmit="return confirmDelete('module');" class="small-form">
-                <input type="hidden" name="module_id" value="<?=$module['module_id']?>">
-                <input type="submit" value="Delete" class="delete-btn">
-            </form>
+                <form action="deletemodule.php" method="post" onsubmit="return confirmDelete('module');" class="small-form">
+                    <input type="hidden" name="module_id" value="<?=$module['module_id']?>">
+                    <input type="submit" value="Delete" class="delete-btn">
+                </form>
+            <?php endif; ?>
         </td>
     </tr>
     <?php endforeach; ?>

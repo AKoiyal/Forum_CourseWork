@@ -1,4 +1,5 @@
 <?php
+session_start();
 include 'includes/DatabaseConnection.php';
 
 if (isset($_POST['module_id'])) {
